@@ -1,0 +1,190 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Page</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=Playfair+Display:wght@600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right, #ffd1dc, #ffe6eb);
+    text-align: center;
+  }
+
+  /* Question Text (Serif Romantic) */
+  h1 {
+    color: #ff2e63;
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+  }
+
+  /* Fantasy Buttons */
+  button {
+    padding: 15px 32px;
+    font-size: 18px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    position: absolute;
+    transition: 0.3s;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  }
+
+  .yes {
+    background: linear-gradient(45deg, #00c853, #69f0ae);
+    color: white;
+    left: 40%;
+    top: 60%;
+  }
+
+  .no {
+    background: linear-gradient(45deg, #ff1744, #ff8a80);
+    color: white;
+    left: 55%;
+    top: 60%;
+  }
+
+  button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(0,0,0,0.4);
+  }
+
+  .new-page {
+    display: none;
+    position: absolute;
+    text-align: center;
+  }
+
+  /* Love Text (Valentine Serif Elegant) */
+  .love-text {
+    font-size: 42px;
+    color: #ff2e63;
+    margin-bottom: 15px;
+    font-family: 'Great Vibes', cursive;
+  }
+
+  .new-page img {
+    width: 230px;
+    border-radius: 20px;
+  }
+
+  .heart {
+    position: fixed;
+    top: -10px;
+    font-size: 24px;
+    animation: fall linear infinite;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(100vh);
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<h1 id="question">Will you be my Life Partner? 🌹</h1>
+
+<button class="yes" id="yesBtn">Yes 💖</button>
+<button class="no" id="noBtn">No 😈</button>
+
+<div class="new-page" id="newPage">
+  <div class="love-text">Just Say Bhalobasi Apnk❤️🥰</div>
+  <img src="cat.jpg">
+</div>
+
+<audio id="music" src="music.mp3"></audio>
+
+<script>
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
+  const music = document.getElementById("music");
+
+  let yesSize = 18;
+  let noSize = 18;
+
+  function vibrate() {
+    if (navigator.vibrate) {
+      navigator.vibrate([100, 50, 100]);
+    }
+  }
+
+  function moveButton() {
+    const maxX = window.innerWidth - 120;
+    const maxY = window.innerHeight - 60;
+
+    let x, y;
+
+    do {
+      x = Math.random() * maxX;
+      y = Math.random() * maxY;
+    } while (isNearYes(x, y));
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    noSize += 2;
+    noBtn.style.fontSize = noSize + "px";
+
+    yesSize += 3;
+    yesBtn.style.fontSize = yesSize + "px";
+  }
+
+  function isNearYes(x, y) {
+    const yesRect = yesBtn.getBoundingClientRect();
+
+    return (
+      x < yesRect.right &&
+      x + 100 > yesRect.left &&
+      y < yesRect.bottom &&
+      y + 50 > yesRect.top
+    );
+  }
+
+  noBtn.addEventListener("mouseover", moveButton);
+
+  noBtn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    vibrate();
+    moveButton();
+  });
+
+  function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤️";
+
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 5000);
+  }
+
+  yesBtn.addEventListener("click", function() {
+    document.getElementById("question").style.display = "none";
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
+
+    document.getElementById("newPage").style.display = "block";
+
+    music.play();
+    setInterval(createHeart, 200);
+  });
+</script>
+
+</body>
+</html>
